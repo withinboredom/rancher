@@ -13,6 +13,7 @@ RUN apt-get update && \
      conntrack \
      libaio1 \
      fio && \
+     jq && \
     curl -s https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz | tar -zxv -C /tmp/ && \
     cd /tmp/Python-2.7.11 && ./configure && make && make install && \
     curl -s https://bootstrap.pypa.io/get-pip.py | python && \
@@ -21,9 +22,8 @@ RUN apt-get update && \
     apt-get remove -y --purge make libffi-dev libssl-dev gcc && apt-get autoremove -y && \
     rm -rf /tmp/Python-2.7.11
 
-RUN curl -s http://stedolan.github.io/jq/download/linux64/jq > /usr/bin/jq; chmod +x /usr/bin/jq && \
-    curl -s -L https://get.docker.com/builds/Linux/x86_64/docker-1.6.0 > /usr/bin/docker; chmod +x /usr/bin/docker && \
-    curl -s -L https://get.docker.com/builds/Linux/x86_64/docker-1.9.1 > /usr/bin/docker-1.9; chmod +x /usr/bin/docker-1.9
+RUN curl -s -L https://downloads.hypriot.com/docker-hypriot_1.9.1-1_armhf.deb > docker-1.9.1.deb; dpkg -i docker-1.9.1.deb; apt-get install -f; cp /usr/bin/docker /usr/bin/docker-1.9; \
+    curl -s -L https://downloads.hypriot.com/docker-hypriot_1.6.0-1_armhf.deb > docker-1.6.deb; dpkg -i docker-1.6.deb
 
 RUN mkdir -p /var/lib/cattle /var/lib/rancher
 COPY register.py resolve_url.py run.sh /
